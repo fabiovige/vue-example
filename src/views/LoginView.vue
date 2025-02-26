@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { reactive, ref, getCurrentInstance } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
 import { authService } from '@/services/auth.service';
@@ -16,29 +16,22 @@ const message = ref('');
 const isLoading = ref(false);
 const showPassword = ref(false);
 
+const app = getCurrentInstance();
+const { $toast } = app?.proxy || {};
+
 async function login() {
-    message.value = ''; // Limpa mensagem anterior
     try {
         isLoading.value = true;
         const response = await authService.login(user);
         
         if (response.data.token) {
+            $toast?.success(response.data.message || 'Login realizado com sucesso');
             router.push({ name: 'dashboard' });
-        } else {
-            message.value = response.data.message || 'Credenciais inválidas';
         }
     } catch (error: any) {
-        // Tratamento mais detalhado do erro
-        if (error.response) {
-            // Erro da resposta do servidor
-            message.value = error.response.data.message || 'Credenciais inválidas';
-        } else if (error.request) {
-            // Erro de conexão
-            message.value = 'Erro de conexão. Tente novamente.';
-        } else {
-            // Outros erros
-            message.value = 'Ocorreu um erro. Tente novamente.';
-        }
+        const errorMessage = error.response?.data?.message 
+            || 'Ocorreu um erro ao tentar fazer login';
+        $toast?.error(errorMessage);
         console.error('Erro no login:', error);
     } finally {
         isLoading.value = false;

@@ -11,9 +11,12 @@ import router from './router'
 // Apenas o JS do Bootstrap
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
+import { toast } from './plugins/toast'
+
 const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.use(toast)
 
 app.mount('#app')

@@ -2,20 +2,35 @@
 import http from '@/services/http';
 import { reactive } from 'vue';
 import { ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const authStore = useAuthStore();
 
 const user = reactive({
-    email: '',
-    password: '',
+    email: 'fabiovige@gmail.com',
+    password: 'password',
 });
 
 const message = ref('');
+const isLoading = ref(false);
 
 async function login() {
     try {
+        isLoading.value = true;
         const response = await http.post('/login', user);
-        console.log(response.data);
+        if(response.data.token) {
+            authStore.setToken(response.data.token);
+            authStore.setUser(response.data.user);
+            router.push({ name: 'dashboard' });
+        } else {
+            message.value = response.data.message;
+        }
     } catch (error) {
         message.value = error?.response?.data.message;
+    } finally {
+        isLoading.value = false;
     }
 }
 </script>
@@ -25,9 +40,11 @@ async function login() {
         <h1>Login</h1>
         <p>{{ message }}</p>
         <form @submit.prevent="login">
-            <input type="text" placeholder="Email" v-model="user.email" />
-            <input type="password" placeholder="Password" v-model="user.password" />
-            <button type="submit">Login</button>
+            <input type="text" placeholder="Email" v-model="user.email" :disabled="isLoading" />
+            <input type="password" placeholder="Password" v-model="user.password" :disabled="isLoading" />
+            <button type="submit" :disabled="isLoading">
+                {{ isLoading ? 'Carregando...' : 'Login' }}
+            </button>
         </form>
     </div>
 </template>

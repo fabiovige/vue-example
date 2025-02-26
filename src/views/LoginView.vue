@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import http from '@/services/http';
-import { reactive } from 'vue';
-import { ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'vue-router';
+import { authService } from '@/services/auth.service';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -19,7 +18,7 @@ const isLoading = ref(false);
 async function login() {
     try {
         isLoading.value = true;
-        const response = await http.post('/login', user);
+        const response = await authService.login(user);
         if(response.data.token) {
             authStore.setToken(response.data.token);
             authStore.setUser(response.data.user);

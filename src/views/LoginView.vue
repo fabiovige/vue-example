@@ -8,8 +8,8 @@ const router = useRouter();
 const authStore = useAuthStore();
 
 const user = reactive({
-    email: 'fabiovige@gmail.com',
-    password: 'password',
+    email: '',
+    password: '',
 });
 
 const message = ref('');
@@ -17,16 +17,29 @@ const isLoading = ref(false);
 const showPassword = ref(false);
 
 async function login() {
+    message.value = ''; // Limpa mensagem anterior
     try {
         isLoading.value = true;
         const response = await authService.login(user);
-        if(response.data.token) {
+        
+        if (response.data.token) {
             router.push({ name: 'dashboard' });
         } else {
-            message.value = response.data.message;
+            message.value = response.data.message || 'Credenciais inválidas';
         }
-    } catch (error) {
-        message.value = error?.response?.data.message;
+    } catch (error: any) {
+        // Tratamento mais detalhado do erro
+        if (error.response) {
+            // Erro da resposta do servidor
+            message.value = error.response.data.message || 'Credenciais inválidas';
+        } else if (error.request) {
+            // Erro de conexão
+            message.value = 'Erro de conexão. Tente novamente.';
+        } else {
+            // Outros erros
+            message.value = 'Ocorreu um erro. Tente novamente.';
+        }
+        console.error('Erro no login:', error);
     } finally {
         isLoading.value = false;
     }
@@ -53,6 +66,13 @@ async function login() {
           <!-- Card de Login -->
           <div class="card border-0 shadow-sm">
             <div class="card-body p-4">
+              <!-- Mensagem de Erro -->
+              <div v-if="message" class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {{ message }}
+                <button type="button" class="btn-close" @click="message = ''"></button>
+              </div>
+
               <form @submit.prevent="login">
                 <!-- Email -->
                 <div class="mb-3">
@@ -184,6 +204,25 @@ async function login() {
 .form-label {
   font-weight: 500;
   font-size: 0.875rem;
+}
+
+/* Estilo para o alerta */
+.alert {
+  font-size: 0.875rem;
+  border: none;
+}
+
+.alert-danger {
+  background-color: rgba(var(--bs-danger-rgb), 0.1);
+  color: var(--bs-danger);
+}
+
+.btn-close {
+  padding: 0.75rem;
+}
+
+.btn-close:focus {
+  box-shadow: none;
 }
 </style>
 

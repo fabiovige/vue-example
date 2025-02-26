@@ -30,4 +30,23 @@ $link-color: $primary;
 $link-hover-color: darken($primary, 10%);
 
 // Importação do Bootstrap
-@import "bootstrap/scss/bootstrap"; 
+@import "bootstrap/scss/bootstrap";
+
+// Importação da fonte Inter do Google Fonts (adicione no index.html)
+// <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+// Variáveis de tipografia
+$font-family-sans-serif: 'Inter', system-ui, -apple-system, sans-serif;
+$font-size-base: 0.875rem;  // 14px
+$font-size-sm: 0.8125rem;   // 13px
+$font-size-lg: 1rem;        // 16px
+$line-height-base: 1.5;
+$headings-font-weight: 600;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Ajustes de espaçamento
+$spacer: 1rem;
+$headings-margin-bottom: $spacer * .75; 

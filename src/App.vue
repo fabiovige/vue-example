@@ -50,11 +50,19 @@ const getUserInitials = computed(() => {
     <!-- Sidebar -->
     <nav id="sidebar" class="shadow-sm d-flex flex-column" :class="{ 'collapsed': isMenuCollapsed }">
       <div class="sidebar-header p-3 border-bottom d-flex justify-content-between align-items-center">
-        <RouterLink class="text-decoration-none text-white fs-4 fw-bold d-flex align-items-center" to="/" v-if="!isMenuCollapsed">
-          <i class="bi bi-boxes me-2"></i> Vue Auth
+        <RouterLink 
+          class="logo-link d-flex align-items-center text-decoration-none" 
+          to="/" 
+          v-if="!isMenuCollapsed"
+        >
+          <div class="logo-container me-2">
+            <i class="bi bi-hexagon-fill text-white"></i>
+            <i class="bi bi-hexagon-half position-absolute top-50 start-50 translate-middle text-white opacity-50"></i>
+          </div>
+          <span class="logo-text">Vue Auth</span>
         </RouterLink>
         <button 
-          class="btn-toggle-menu"
+          class="btn-toggle-menu ms-auto"
           @click="toggleMenu"
           :title="isMenuCollapsed ? 'Expandir menu' : 'Recolher menu'"
         >
@@ -64,19 +72,19 @@ const getUserInitials = computed(() => {
 
       <div class="sidebar-content flex-grow-1">
         <ul class="list-unstyled p-3">
-          <li class="nav-item mb-3">
+          <li class="nav-item mb-1">
             <RouterLink class="nav-link text-white d-flex align-items-center" to="/">
               <i class="bi bi-house-door fs-5 me-2"></i>
               <span v-if="!isMenuCollapsed">Home</span>
             </RouterLink>
           </li>
-          <li class="nav-item mb-3">
+          <li class="nav-item mb-1">
             <RouterLink class="nav-link text-white d-flex align-items-center" to="/about">
               <i class="bi bi-info-circle fs-5 me-2"></i>
               <span v-if="!isMenuCollapsed">Sobre</span>
             </RouterLink>
           </li>
-          <li class="nav-item mb-3" v-if="authStore.token">
+          <li class="nav-item mb-1" v-if="authStore.token">
             <RouterLink class="nav-link text-white d-flex align-items-center" to="/dashboard">
               <i class="bi bi-speedometer2 fs-5 me-2"></i>
               <span v-if="!isMenuCollapsed">Dashboard</span>
@@ -88,7 +96,7 @@ const getUserInitials = computed(() => {
       <div class="sidebar-bottom border-top">
         <RouterLink 
           to="/profile" 
-          class="nav-link d-flex align-items-center p-3"
+          class="nav-link d-flex align-items-center"
           :class="{ 'justify-content-center': isMenuCollapsed }"
         >
           <i class="bi bi-gear-fill fs-5 me-2"></i>
@@ -130,22 +138,10 @@ const getUserInitials = computed(() => {
                 </button>
                 <div class="dropdown-menu dropdown-menu-end shadow-sm border p-0" :class="{ show: showNotifications }">
                   <div class="p-3 border-bottom">
-                    <h6 class="mb-0 fw-semibold">Notificações</h6>
+                    <h6 class="notifications-title mb-0">Notificações</h6>
                   </div>
-                  <div class="notifications-list" style="max-height: 300px; overflow-y: auto;">
-                    <a href="#" class="dropdown-item px-3 py-2 border-bottom d-flex align-items-center">
-                      <div class="flex-shrink-0">
-                        <div class="notification-icon bg-primary bg-opacity-10 text-primary rounded-circle p-2">
-                          <i class="bi bi-envelope"></i>
-                        </div>
-                      </div>
-                      <div class="flex-grow-1 ms-3">
-                        <p class="mb-0 fs-7">Nova mensagem recebida</p>
-                        <small class="text-muted">há 3 minutos</small>
-                      </div>
-                    </a>
-                    <!-- Mais notificações aqui... -->
-                  </div>
+                  <div class="notification-text">Nova mensagem recebida</div>
+                  <div class="notification-time">há 3 minutos</div>
                   <div class="p-2 border-top text-center">
                     <small><a href="#" class="text-decoration-none">Ver todas</a></small>
                   </div>
@@ -163,8 +159,8 @@ const getUserInitials = computed(() => {
                     <span class="initials">{{ getUserInitials }}</span>
                   </div>
                   <div class="d-none d-sm-block">
-                    <div class="fw-semibold text-dark">{{ authStore.user?.name }}</div>
-                    <small class="text-muted">{{ authStore.user?.email }}</small>
+                    <div class="user-name">{{ authStore.user?.name }}</div>
+                    <div class="user-email">{{ authStore.user?.email }}</div>
                   </div>
                   <i class="bi bi-chevron-down ms-1"></i>
                 </button>
@@ -270,23 +266,24 @@ body {
 }
 
 .router-link-active {
-  background: rgba(255, 255, 255, 0.2) !important;
+  background: transparent !important;
   opacity: 1 !important;
-  font-weight: 500;
+  font-weight: 600;
+  color: white !important;
 }
 
 .nav-link {
-  padding: 0.8rem 1rem;
+  padding: 0.6rem 1rem;
   border-radius: 4px;
-  transition: all 0.2s;
-  opacity: 0.85;
-  color: white !important;
+  transition: opacity 0.2s;
+  opacity: 0.75;
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .nav-link:hover {
   opacity: 1;
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateX(5px);
+  color: white !important;
+  transform: none;
 }
 
 .dropdown-menu {
@@ -345,12 +342,13 @@ body {
 }
 
 #sidebar.collapsed .btn-toggle-menu i {
-  transform: rotate(180deg);
+  transform: none;
 }
 
 .sidebar-header {
   min-height: 60px;
   background-color: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 .footer {
@@ -448,5 +446,170 @@ body {
   z-index: 1040;
   background-color: var(--bs-white);
   width: 100%;
+}
+
+.logo-link {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.logo-container {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-text {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.25px;
+}
+
+#sidebar.collapsed .btn-toggle-menu {
+  margin-left: 0;
+}
+
+.breadcrumb {
+  font-size: 0.8125rem;
+}
+
+.breadcrumb-item.active {
+  font-weight: 500;
+}
+
+.dropdown-item {
+  font-size: 0.8125rem;
+  padding: 0.5rem 1rem;
+}
+
+.dropdown-header {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.btn {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+}
+
+.footer {
+  font-size: 0.8125rem;
+}
+
+.footer-link {
+  font-weight: 500;
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.user-email {
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.notifications-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.25px;
+}
+
+.notification-text {
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.notification-time {
+  font-size: 0.75rem;
+  color: var(--bs-gray-600);
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+#sidebar.collapsed .nav-link {
+  padding: 0.8rem;
+  display: flex;
+  justify-content: center;
+}
+
+#sidebar.collapsed .router-link-active {
+  background: transparent !important;
+  padding-left: 0.8rem;
+}
+
+#sidebar.collapsed .router-link-active i {
+  transform: none;
+}
+
+/* Ajuste do footer e sidebar-bottom */
+.footer, .sidebar-bottom .nav-link {
+  height: 56px; /* Altura padrão */
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.sidebar-bottom {
+  background-color: rgba(0, 0, 0, 0.1);
+  margin-top: auto;
+  position: relative;
+}
+
+.sidebar-bottom .nav-link {
+  display: flex;
+  align-items: center;
+}
+
+/* Ajuste para o menu colapsado */
+#sidebar.collapsed .sidebar-bottom .nav-link {
+  justify-content: center;
+  padding: 0;
+}
+
+/* Altura padrão para header e sidebar-header */
+.sidebar-header,
+header {
+  height: 60px; /* Altura padrão */
+  display: flex;
+  align-items: center;
+}
+
+/* Ajuste do container dentro do header */
+header .container-fluid {
+  flex: 1;
+}
+
+header .py-3 {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* Ajuste do logo */
+.logo-link {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* Ajuste do breadcrumb para centralizar verticalmente */
+.breadcrumb {
+  margin-bottom: 0;
 }
 </style>

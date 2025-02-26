@@ -20,15 +20,8 @@ async function logout() {
     
         <div class="row">
             <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h1>Dashboard</h1>
-                    <button @click="logout" class="btn btn-danger">
-                        Sair
-                    </button>
-                </div>
-                <div class="alert alert-success mt-3">
                     Bem-vindo, {{ authStore.user?.name }}
-                </div>
+                
             </div>
         </div>
     

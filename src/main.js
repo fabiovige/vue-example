@@ -1,4 +1,6 @@
+import './assets/custom.scss'
 import './assets/main.css'
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -6,8 +8,7 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-// Importações do Bootstrap
-import 'bootstrap/dist/css/bootstrap.min.css'
+// Apenas o JS do Bootstrap
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 
 const app = createApp(App)

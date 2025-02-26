@@ -20,8 +20,6 @@ async function login() {
         isLoading.value = true;
         const response = await authService.login(user);
         if(response.data.token) {
-            authStore.setToken(response.data.token);
-            authStore.setUser(response.data.user);
             router.push({ name: 'dashboard' });
         } else {
             message.value = response.data.message;

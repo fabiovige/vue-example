@@ -9,7 +9,6 @@ const authStore = useAuthStore();
 async function logout() {
     try {
         await authService.logout();
-        authStore.clearAuth(); // Limpa os dados do usuário e token
         router.push({ name: 'login' });
     } catch (error) {
         console.error('Erro ao fazer logout:', error);
